@@ -76,10 +76,8 @@ public struct SNetContent<dataType:Any, contentT: View, fish: View>: View {
         DispatchQueue.global(qos: .background).async {
             let iV = self.request()
             DispatchQueue.main.async {
-                withAnimation {
-                    self.initialValue = iV
-                    self.didExecute = true
-                }
+                self.initialValue = iV
+                self.didExecute = true
             }
         }
     }
