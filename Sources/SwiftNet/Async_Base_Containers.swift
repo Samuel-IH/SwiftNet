@@ -11,7 +11,31 @@ import SwiftUI
 
 
 
-public struct SNetContainer<dataType:Any, contentT: View>: View {
+/// SNetMicroContent provides a shortcut interface to SNetContent.
+///
+/// Use SNetMicroContent when your _"loading"_ view uses the same datatype as your _"final"_ view. For example:
+///
+///       SNetMicroContent(initialValue: UIImage(systemName: "pencil.and.outline")!, request: {
+///           sleep(3)
+///           return UIImage(systemName: "tortoise")!
+///       }) { img in
+///           if true {
+///               Image(uiImage: img)
+///                   .resizable()
+///                   .scaledToFit()
+///                   .frame(width: 100)
+///           }
+///       }
+///
+/// For more info on SNetContent (the base component of SNetMicroContent) check out it's quick help.
+public struct SNetMicroContent<dataType:Any, contentT: View>: View {
+    
+    public init (initialValue: dataType, request: @escaping () -> dataType, @ViewBuilder content: @escaping (dataType) -> contentT) {
+        self._initialValue = State(initialValue: initialValue)
+        self.request = request
+        self.content = content
+    }
+    
     @State var initialValue: dataType
     var request: ()-> dataType
     var content: (dataType)-> contentT
@@ -45,7 +69,7 @@ public struct SNetContent<dataType:Any, contentT: View, fish: View>: View {
     ///   - initialView: The view that is displayed before the network content loads.
     ///   - request: A closure that is executed to provide the network content. This is your network call, and it will automatically be offloaded to the background thread.
     ///   - content: The view that takes the content that you wish to display, this closure provides the output value of __request__
-    public init(initialView: @escaping () -> fish, request: @escaping () -> dataType, content: @escaping (dataType) -> contentT) {
+    public init(@ViewBuilder initialView: @escaping () -> fish, request: @escaping () -> dataType, @ViewBuilder content: @escaping (dataType) -> contentT) {
         self.initialView = initialView
         self.request = request
         self.content = content
