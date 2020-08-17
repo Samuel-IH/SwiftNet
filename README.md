@@ -1,6 +1,6 @@
 # SwiftNet
 
-A small library to help you embed asynchronous content beutifully in SwiftUI.
+A small library to help you embed asynchronous content beautifully in SwiftUI.
 
 
 ## Use
